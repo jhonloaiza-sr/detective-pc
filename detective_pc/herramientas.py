@@ -101,5 +101,48 @@ class DetectiveArchivos:
         # Formateamos cada archivo con su nombre y tamaño en MB y lo devolvemos unido por saltos de línea.
         return "\n".join(f"- {f.name} ({f.stat().st_size / (1024 * 1024):.2f} MB)" for f in top)
 
+    #Metodo para mover archivos
+    def mover_archivo(self,nombre_archivo: str, carpeta_destino: str)-> str:
+        #Se especifica a Ollama que hace el método
+        """
+        Te encargas de trasladar el archivo que se ubica en el parametro nombre_archivo el cual debe incluir la extension (ej, .pdf, .txt, .exe) a la carpeta que se encuentra en el parametro carpeta_destino que es el nombre de la subcarpeta donde se guardará (ej, "Notas").
+        """
+        #Se almacena el origen del archivo
+        origen : Path = self.carpeta/ nombre_archivo
+        #Se verifica si es un archivo
+        if not origen.is_file():
+            #Imprime error si no hay archico
+            return f"No se encontro el archivo {nombre_archivo}"
+        #Confirmacion del usuario si se quiere realizar el traslado
+        confirmacion = input(f"[SEGURIDAD] Confirmas mover '{nombre_archivo}' a '{carpeta_destino}'? (s/n): ").strip().lower()
+        #Se verifica confimación
+        if confirmacion not in ("s", "si", "sí"):
+            #Mensaje de que cancela la operacion
+            return"operación cancelada por el usuario."
+        #Se almacena la dirección de la nueva carpeta
+        carpeta_nueva : Path = self.carpeta/carpeta_destino
+        #Se crea la carpeta si ya esta no se crea
+        carpeta_nueva.mkdir(parents = True, exist_ok = True)
+        #Se almacena el destino del archivo de origen
+        destino : Path = carpeta_nueva/origen.name
+        #Se verifica si ya esta en el destino
+        if destino.exists():
+            #Retorna mensaje de error
+            return f"Error: Ya existe {origen.name} dentro de la carpeta {carpeta_destino}"
+
+        try:
+            origen.rename(destino)
+            return "se realizo el traslado con exito"
+        except Exception as error:
+            return f"Error al mover el archivo: {error}"
+
+        
+
+
+
+        
+
+
+
 
 

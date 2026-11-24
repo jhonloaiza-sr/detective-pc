@@ -17,9 +17,14 @@ class AgenteDetective:
         self.detective : DetectiveArchivos = detective
         #Se crea un diccionario que mapea el texto de cada método objeto
         self.herramientas : dict[str,Any] = {
+            #Herramienta 1. Lista carpetas y archivos
             "listar_contenido": self.detective.listar_contenido,
+            #Herramienta 2. Busca archivos por extension
             "buscar_por_extension": self.detective.buscar_por_extension,
+            #Herramienta 3. Encuentra los archivos más pesados
             "buscar_mas_pesados": self.detective.buscar_mas_pesados,
+            #Herramienta 4. Mueve un archivo a una subcarpeta pidiendo permiso humano primero
+            "mover_archivo": self.detective.mover_archivo
             }
         self.lista_tools : list[Any] = list(self.herramientas.values())
         self.historial : list[Any] = [{"role": "system", "content": self.config.instrucciones}]
